@@ -1,0 +1,31 @@
+.beerCard {
+  width: 44%;
+  float: left;
+  padding: 1%;
+  margin: 1%;
+}
+
+.beerCardImage {
+  margin-left: 25%;
+  width: 50%;
+
+}
+
+.contributedBy {
+  font-weight: bold;
+}
+
+.beerTab {
+  border: none;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.activeBeerTab {
+  background: #4dd2ff;
+}
+
+.beerCardHeader {
+  background: none;
+  padding-bottom: 0px;
+}
