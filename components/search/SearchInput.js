@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, FormControl, InputGroup } from 'react-bootstrap';
-import { Search, Cart3 } from 'react-bootstrap-icons';
+import { Search } from 'react-bootstrap-icons';
 import Link from 'next/link';
 import styles from './searchInput.module.scss';
 import LoadingSpinner from '../atoms/loadingSpinner/LoadingSpinner';
@@ -69,10 +69,6 @@ export default function SearchInput() {
       </Table>
     
     )}
-    <div style={{padding: '6px 30px'}}>
-    <span style={{position: 'relative', paddingRight: '6px', top: '3px'}}>4</span>
-    <Cart3 />
-    </div>
   </InputGroup>
 
 

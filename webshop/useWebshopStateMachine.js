@@ -10,10 +10,20 @@ function reducer(state, event) {
         case 'index': {
             const cart = JSON.parse(window.localStorage.getItem('cart')) || {};
 
+            if (event.type === 'FETCH_ORDER') {
+                return {
+                    ...state,
+                    cart: cart,
+                
+            }
+          
+        }
+
+
             if (event.type === 'ADD_ITEM_TO_CART') {
                 console.log('adding item to cart', event)
-                cart[event.beer.id] = event.beer;
-                cart[event.beer.id].quantityInCart = 1;
+                cart['beerid' + event.beer.id] = event.beer;
+                cart['beerid' + event.beer.id].quantityInCart = 1;
                 window.localStorage.setItem('cart', JSON.stringify(cart));
 
                 return {
@@ -22,8 +32,8 @@ function reducer(state, event) {
                 }     
             }
 
-            if (event.type === 'INCREMENT_ITEM_IN_CART') {
-                cart[event.payload.id].quantity++;
+            if (event.type === 'INCREMENT_ITEM_QUANTITY') {
+                cart[event.itemId].quantityInCart++;
                 window.localStorage.setItem('cart', JSON.stringify(cart));
 
                 return {
@@ -32,8 +42,8 @@ function reducer(state, event) {
                 }   
             }
 
-            if (event.type === 'DECREMENT_ITEM_IN_CART') {
-                cart[event.payload.id].quantity--;
+            if (event.type === 'DECREMENT_ITEM_QUANTITY') {
+                cart[event.itemId].quantityInCart--;
                 window.localStorage.setItem('cart', JSON.stringify(cart));
 
                 return {
@@ -43,7 +53,7 @@ function reducer(state, event) {
             }
 
             if (event.type === 'REMOVE_ITEM_FROM_CART') {
-                delete cart[event.payload.id];
+                delete cart[event.itemId];
                 window.localStorage.setItem('cart', JSON.stringify(cart));
 
                 return {
@@ -61,7 +71,7 @@ function reducer(state, event) {
                 }
             }
 
-            if (event.type === 'INITIATE_CHECKOUT') {
+            if (event.type === 'CHECKOUT') {
                 return {
                     ...state,
                     status: 'pendingPurchase',
@@ -106,6 +116,7 @@ export function useWebshopStateMachine(campaign) {
 
     const formRef = useRef(null);
 
+    
     if (runningOnClient() && !window.localStorage.getItem('cart')) {
         window.localStorage.setItem('cart', JSON.stringify({}));
     }
