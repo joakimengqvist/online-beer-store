@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react'
-import { Card, Button, Row, Col } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react'
+import { Card, Button, Row, Col, Modal } from 'react-bootstrap';
 import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
 import Link from 'next/link';
 import styles from './cart.module.scss';
 
-export default function Cart({ checkoutPage }) {
+export default function Cart({ checkoutPage = false }) {
     const [state, dispatch] = useWebshopStateMachine();
+    const [showPaymenyModal, setShowPaymentModal] = useState(false);
 
     function increment(itemId) {
         dispatch({ type: 'INCREMENT_ITEM_QUANTITY', itemId });
@@ -28,14 +29,13 @@ export default function Cart({ checkoutPage }) {
     }
 
     function checkout() {
+        setShowPaymentModal(true);
         dispatch({ type: 'CHECKOUT' });
     }
 
     useEffect(() => {
-        if (Object.keys(state.cart).length === 0) {
             dispatch({ type: 'FETCH_ORDER' });
-        }
-    }, [state.cart]);
+    }, []);
     
     if (state.cart === {}) {
         return null;
@@ -52,16 +52,50 @@ export default function Cart({ checkoutPage }) {
                     {checkoutPage ? 
                     <Button onClick={checkout}>Checkout</Button> : (
                     <Link href="/checkout">
-                    <Button onClick={checkout}>Checkout</Button>
+                    <Button>Checkout</Button>
                     </Link>
                     )}
                 </Col>
             </Row>
+            <PaymentModal 
+                show={showPaymenyModal} 
+                handleClose={() => 
+                setShowPaymentModal(false)} 
+                state={state} 
+                dispatch={dispatch} />
         </Card>
     )
 }
 
+function PaymentModal(props) {
+    const { show, handleClose, state} = props; 
 
+    useEffect(() => {
+        if (state.status === 'index') {
+            handleClose();
+        }
+    }, [state.status]);
+  
+    return (
+        <Modal show={show}>
+          <Modal.Header style={{maxWidth: '1000px'}}>
+            <Modal.Title>Payment</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{maxWidth: '1000px'}}>
+           {state.status === 'pendingPurchase' && (
+               <h5>Pending purchase</h5>
+           )}
+            {state.status === 'pendingPayment' && (
+               <h5>Pending Payment</h5>
+           )}
+            {state.status === 'purchaseCompleted' && (
+               <h5>Purchase completed</h5>
+           )}
+            </Modal.Body>
+        </Modal>
+   
+    );
+  }
 
 function ItemInCheckout(props) {
     const { state, increment, decrement, removeItem } = props;

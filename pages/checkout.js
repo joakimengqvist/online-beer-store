@@ -9,7 +9,7 @@ export default function Checkout() {
         <MainLayout>
             <Row>
                 <Col>
-                    <Cart />
+                    <Cart checkoutPage={true} />
                 </Col>
                 <Col></Col>
             </Row>

@@ -8,7 +8,7 @@ export default function Footer() {
         <Row>
            
             <Col>
-            <Card>
+            <Card style={{border: 'none'}}>
                 <Card.Body>
                     <Card.Title>About</Card.Title>
                     <Card.Text>
@@ -18,7 +18,7 @@ export default function Footer() {
             </Card>
             </Col>
             <Col>
-            <Card>
+            <Card style={{border: 'none'}}>
                 <Card.Body>
                     <Card.Title>About</Card.Title>
                     <Card.Text>
@@ -28,7 +28,7 @@ export default function Footer() {
             </Card>
             </Col>
             <Col>
-            <Card>
+            <Card style={{border: 'none'}}>
                 <Card.Body>
                     <Card.Title>About</Card.Title>
                     <Card.Text>

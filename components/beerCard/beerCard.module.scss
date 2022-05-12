@@ -23,10 +23,14 @@
   border: none;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  margin-left: 2px
 }
 
 .activeBeerTab {
-  background: #4dd2ff;
+  background: #e6f0ff;
 }
 
 .beerCardHeader {

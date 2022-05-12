@@ -3,7 +3,6 @@ import MainLayout from '../layouts/MainLayout';
 import BeerCard from '../components/beerCard/BeerCard';
 
 export default function Index({beers}) {
-    console.log('beers', beers)
     return (
         <MainLayout>
             {beers.map(beer => (

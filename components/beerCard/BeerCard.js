@@ -5,7 +5,6 @@ import styles from './beerCard.module.scss';
 import { joinClassNames } from '../../helpers/classNameHelpers';
 import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
 
-
 export default function BeerCard({beer}) {
     const [showingTab, setShowingTab] = useState('main');
     const [readMore, setReadMore] = useState(false);
@@ -15,7 +14,6 @@ export default function BeerCard({beer}) {
     function addToCard() {
         dispatch({ type: 'ADD_ITEM_TO_CART', beer });
     }
-
 
     return (
         <Card className={styles.beerCard}>   
@@ -61,7 +59,9 @@ export default function BeerCard({beer}) {
                         ))}
                         <span>Food pairing: </span>
                         {beer.food_pairing.map(food => (
-                            <span key={food}>{food} </span>
+                            <span key={food}>{food} 
+                            {beer.food_pairing.length - 1 === beer.food_pairing.indexOf(food) ? '.' : ', '}
+                            </span>
                         ))}
                     </Col>
                     )}
