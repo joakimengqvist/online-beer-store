@@ -12,3 +12,9 @@
     font-weight: 500;
     font-size: 16px;
 }
+
+.cartModal {
+    :first-child {
+        max-width: 800px !important;
+    }
+}

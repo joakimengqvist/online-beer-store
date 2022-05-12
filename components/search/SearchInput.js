@@ -54,7 +54,7 @@ export default function SearchInput() {
     )}
     </InputGroup.Text>
     {!loadingSearch && searchResults && (
-        <Table border style={{position: 'absolute', top: '50px', zIndex: '1'}}>
+        <Table style={{position: 'absolute', top: '50px', zIndex: '1'}}>
         <tbody style={{ border: 'solid 1px lightgray'}}>
         {searchResults.map((beer, i) => (
             <tr key={beer.id} className={i % 2 === 0 ? styles.evenSearchListResult : styles.unEvenSearchListResult}>

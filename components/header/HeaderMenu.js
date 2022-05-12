@@ -68,14 +68,16 @@ function CartModal(props) {
   const { show, handleClose } = props; 
 
   return (
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header style={{maxWidth: '1000px'}} closeButton>
+    <div className={styles.cartModal}>
+      <Modal className={styles.cartModal} show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
           <Modal.Title>Cart</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{maxWidth: '1000px'}}>
+        <Modal.Body>
           <Cart />
           </Modal.Body>
       </Modal>
+      </div>
  
   );
 }
