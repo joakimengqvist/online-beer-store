@@ -12,12 +12,14 @@ export default function HeaderMenu() {
     const [showingCart, setShowingCart] = useState(false);
 
     useEffect(() => {
-      if (Object.keys(state.cart).length === 0) {
-          dispatch({ type: 'FETCH_ORDER' });
-      }
-  }, [state.cart]);
-
-    console.log('header', state)
+      dispatch({ type: 'FETCH_CART_AMOUNT' });
+    }, []);
+    
+    useEffect(() => {
+      setTimeout(() => {
+      dispatch({ type: 'FETCH_CART_AMOUNT' });
+      }, 5000);
+    });
 
     return (
         <Navbar bg="light" expand="lg">
@@ -45,7 +47,7 @@ export default function HeaderMenu() {
               <SearchInput />
               <div className={styles.cartContainer}>
               <span className={styles.cartNumber}>
-                {Object.keys(state.cart).length > 0 && Object.keys(state.cart).length}
+                  {state.itemsInCart}
                 </span>
                 
               <Cart3 onClick={() => setShowingCart(true)} />

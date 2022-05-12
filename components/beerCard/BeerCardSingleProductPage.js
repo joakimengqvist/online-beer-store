@@ -1,47 +1,80 @@
-import React, { useState } from 'react';
-import { Card, Row, Col, Button } from 'react-bootstrap';
-import styles from './beerCard.module.scss';
-import { joinClassNames } from '../../helpers/classNameHelpers';
+import React from 'react';
+import { Card, Row, Col } from 'react-bootstrap';
 
 export default function BeerCardSingleProductPage({beer}) {
 
     return (
-        <Card className={styles.beerCard}>   
-            <Card.Body>
-                <Row>
-                    <Col xs={12} md={8}>
-                        <Card.Title className="mb-3 mt-3">{beer.name}</Card.Title>
-                        <Card.Text>{beer.description}</Card.Text>
-                        <Card.Text>{beer.brewers_tips}</Card.Text>
-                    </Col>
-                    <Col xs={12} md={8}>
-                        <Card.Title className="mb-3 mt-3">Ingredients</Card.Title>
-                        {Object.keys(beer.ingredients).map(ingredientType => (
-                            <Card.Text>
-                                <span>{ingredientType}: </span>
-                                {Array.isArray(beer.ingredients[ingredientType]) ? beer.ingredients[ingredientType].map(ingredient => (
-                                <span key={ingredient.id}>{ingredient.name} </span>
-                                )) : beer.ingredients[ingredientType]}
-                            </Card.Text>   
-                        ))}
-                        <span>Food pairing: </span>
-                        {beer.food_pairing.map(food => (
-                            <span key={food}>{food} </span>
-                        ))}
-                    </Col>
-                    <Col xs={12} md={4} className="pt-4">
-                        <img src={beer.image_url} alt={beer.name} className={styles.beerCardImage} />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Card.Text>Contributed by: <span className={styles.contributedBy}>{beer.contributed_by}</span></Card.Text>
-                    </Col>
-                </Row>
-                <Row>
-                    <Button>Add to cart</Button>
-                </Row>
-            </Card.Body>
-        </Card>
+        <Row>
+            <Col xs={8}>
+                <div style={{marginBottom: '40px'}}>
+                <h1>{beer.name}</h1>
+                <h4>{beer.tagline}</h4>
+                <p>{beer.description}</p>
+                <p>{beer.brewers_tips}</p>
+            </div>
+      
+      <Row>
+    <Col>
+      <Card>
+        <Card.Body>
+          <Card.Title>Brewing information</Card.Title>
+          {Object.keys(beer.ingredients).map(ingredientType => (
+            <div key={ingredientType}>
+              <span>{ingredientType}: </span>
+              {Array.isArray(beer.ingredients[ingredientType]) ? beer.ingredients[ingredientType].map(ingredient => (
+                <span key={ingredient.id}>{ingredient.name} </span>
+              )) : beer.ingredients[ingredientType]}
+            </div>
+          ))}
+          <Card.Text>First brewed: {beer.first_brewed}</Card.Text>
+            <Card.Text>
+                <span style={{fontWeight: '500', fontSize: '18px'}}>Brewing Information</span><br />
+                <span>Fermentation temperature: {beer.method.fermentation.temp.value} {beer.method.fermentation.temp.unit}</span><br />
+             {beer.method.mash_temp.map((mash, i) => (
+                 <span>Mash {++i}: {mash.temp.value}  {mash.temp.unit}  {mash.duration} min<br /></span>
+             ))}
+             <span>Original gravity: {beer.target_og}</span><br/>
+             <span>Final gravity: {beer.target_fg}</span><br/>
+             <span>Attenuation level: {beer.attenuation_level}%</span><br/>
+             <span>Boil volume: {beer.boil_volume.value} {beer.boil_volume.unit}</span><br/>
+             <span>Volume: {beer.volume.value} {beer.volume.unit}</span><br/>
+             <span>PH: {beer.ph}</span><br />
+             <span>First brewed: {beer.first_brewed}</span><br/>
+            </Card.Text>
+          
+        </Card.Body>
+      </Card>
+      </Col>
+
+      <Col>
+      <Card>
+        <Card.Body>
+          <Card.Title>Other information</Card.Title>
+          <Card.Text><span style={{fontWeight: '500', fontSize: '18px'}}>Food pairing</span><br />
+            {beer.food_pairing.map(food => (
+                <span key={food}>
+                    {food}
+                {beer.food_pairing.length - 1 === beer.food_pairing.indexOf(food) ? '.' : ', '}
+                </span>
+            ))}
+       </Card.Text>
+         
+          <Card.Text>
+                <span style={{fontWeight: '500', fontSize: '18px'}}>Assessment</span><br />
+              <span>Standard Reference Method: {beer.srm}</span><br/>
+              <span>European Brewing Convention: {beer.ebc}</span><br/>
+              <span>International Bitterness Units: {beer.ibu}</span><br/>
+              
+            </Card.Text>
+          <Card.Text></Card.Text>
+        </Card.Body>
+      </Card>
+      </Col>
+      </Row>
+      </Col>
+      <Col xs={4} style={{display: 'flex', justifyContent: 'center'}}>
+      <img src={beer.image_url} alt={beer.name} style={{maxHeight: '400px'}}/>
+      </Col>
+      </Row>
     )
 }

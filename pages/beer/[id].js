@@ -1,12 +1,14 @@
 import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
+import { Row, Col, Card } from 'react-bootstrap'
+import BeerCardSingleProductPage from '../../components/beerCard/BeerCardSingleProductPage';
 
 export default function Beer({beer}) {
 
     console.log('beer', beer);
     return (
       <MainLayout>
-        <h1>Beer</h1>
+        <BeerCardSingleProductPage beer={beer}/>
       </MainLayout>
     )
   }
