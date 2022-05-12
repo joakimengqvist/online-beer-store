@@ -1,14 +1,20 @@
 import { useReducer, useEffect, useRef } from 'react';
-import { createEffect } from './createEffect';
+import { createEffect } from '../helpers/createEffect';
+import { runningOnClient } from '../helpers/runningOnClient';
 
 function reducer(state, event) {
+    if (!runningOnClient()) {
+        return null
+    }
     switch (state.status) {
         case 'index': {
-            const cart = JSON.parse(localStorage.getItem('cart')) || {};
+            const cart = JSON.parse(window.localStorage.getItem('cart')) || {};
 
             if (event.type === 'ADD_ITEM_TO_CART') {
-                cart[event.payload.id] = event.payload;
-                localStorage.setItem('cart', JSON.stringify(cart));
+                console.log('adding item to cart', event)
+                cart[event.beer.id] = event.beer;
+                cart[event.beer.id].quantityInCart = 1;
+                window.localStorage.setItem('cart', JSON.stringify(cart));
 
                 return {
                     ...state,
@@ -18,7 +24,7 @@ function reducer(state, event) {
 
             if (event.type === 'INCREMENT_ITEM_IN_CART') {
                 cart[event.payload.id].quantity++;
-                localStorage.setItem('cart', JSON.stringify(cart));
+                window.localStorage.setItem('cart', JSON.stringify(cart));
 
                 return {
                     ...state,
@@ -28,7 +34,7 @@ function reducer(state, event) {
 
             if (event.type === 'DECREMENT_ITEM_IN_CART') {
                 cart[event.payload.id].quantity--;
-                localStorage.setItem('cart', JSON.stringify(cart));
+                window.localStorage.setItem('cart', JSON.stringify(cart));
 
                 return {
                     ...state,
@@ -38,7 +44,7 @@ function reducer(state, event) {
 
             if (event.type === 'REMOVE_ITEM_FROM_CART') {
                 delete cart[event.payload.id];
-                localStorage.setItem('cart', JSON.stringify(cart));
+                window.localStorage.setItem('cart', JSON.stringify(cart));
 
                 return {
                     ...state,
@@ -47,7 +53,7 @@ function reducer(state, event) {
             }
 
             if (event.type === 'ClEAR_CART') {
-                localStorage.setItem('cart', JSON.stringify({}));
+                window.localStorage.setItem('cart', JSON.stringify({}));
 
                 return {
                     ...state,
@@ -100,11 +106,15 @@ export function useWebshopStateMachine(campaign) {
 
     const formRef = useRef(null);
 
-    if (!localStorage.getItem('cart')) {
-        localStorage.setItem('cart', JSON.stringify({}));
+    if (runningOnClient() && !window.localStorage.getItem('cart')) {
+        window.localStorage.setItem('cart', JSON.stringify({}));
     }
 
     useEffect(() => {
+        if (!runningOnClient()) {
+            return null
+        }
+        console.log('cart', state.cart)
         for (const effect of effects) {
             if (effect.status !== 'idle') {
                 continue;
