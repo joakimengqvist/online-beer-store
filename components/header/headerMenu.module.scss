@@ -1,0 +1,14 @@
+.cartContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 30px;
+}
+
+.cartNumber {
+    position: relative;
+    padding-right: 6px;
+    top: 1px;
+    font-weight: 500;
+    font-size: 16px;
+}

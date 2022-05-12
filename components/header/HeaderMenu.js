@@ -1,23 +1,79 @@
-import React from 'react';
-import { Navbar, Container, Nav } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Navbar, Container, Nav, Modal } from 'react-bootstrap';
+import { Cart3 } from 'react-bootstrap-icons';
+import Link from 'next/link';
+import styles from './headerMenu.module.scss';
 import SearchInput from '../search/SearchInput';
+import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
+import Cart from '../cart/Cart';
 
 export default function HeaderMenu() {
+    const [state, dispatch] = useWebshopStateMachine();
+    const [showingCart, setShowingCart] = useState(false);
+
+    useEffect(() => {
+      if (Object.keys(state.cart).length === 0) {
+          dispatch({ type: 'FETCH_ORDER' });
+      }
+  }, [state.cart]);
+
+    console.log('header', state)
+
     return (
         <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Link href="/">
+          <Navbar.Brand style={{marginLeft: '20px'}} href="#home">
+          BrewDog</Navbar.Brand>
+          </Link>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#link">Link</Nav.Link>
+            <div style={{marginLeft: '10px'}}>
+              <Link href="/" >
+              Home
+              </Link>
+              </div>
+            
+              <div style={{marginLeft: '20px'}}>
+              <Link href="/beer">
+             Beers
+              </Link>
+              </div>
             </Nav>
             <Nav className="justify-content-end" style={{width: '360px'}}>
               <SearchInput />
+              <div className={styles.cartContainer}>
+              <span className={styles.cartNumber}>
+                {Object.keys(state.cart).length > 0 && Object.keys(state.cart).length}
+                </span>
+                
+              <Cart3 onClick={() => setShowingCart(true)} />
+
+              <CartModal 
+                show={showingCart}
+                handleClose={() => setShowingCart(false)}
+              />
+            </div>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
     )
+}
+
+function CartModal(props) {
+  const { show, handleClose } = props; 
+
+  return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header style={{maxWidth: '1000px'}} closeButton>
+          <Modal.Title>Cart</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{maxWidth: '1000px'}}>
+          <Cart />
+          </Modal.Body>
+      </Modal>
+ 
+  );
 }

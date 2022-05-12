@@ -3,17 +3,26 @@ import { Card, Row, Col, Nav, Button } from 'react-bootstrap';
 import Link from 'next/link';
 import styles from './beerCard.module.scss';
 import { joinClassNames } from '../../helpers/classNameHelpers';
+import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
+
 
 export default function BeerCard({beer}) {
     const [showingTab, setShowingTab] = useState('main');
     const [readMore, setReadMore] = useState(false);
+
+    const [state, dispatch] = useWebshopStateMachine();
+
+    function addToCard() {
+        dispatch({ type: 'ADD_ITEM_TO_CART', beer });
+    }
+
 
     return (
         <Card className={styles.beerCard}>   
             <Card.Header className={styles.beerCardHeader}>
                 <Nav>
                     <Nav.Item className={joinClassNames(styles.beerTab, showingTab === 'main' && styles.activeBeerTab)} >
-                        <Nav.Link onClick={() => setShowingTab('main')}>{beer.tagline}</Nav.Link>
+                        <Nav.Link onClick={() => setShowingTab('main')}>{beer.name}</Nav.Link>
                     </Nav.Item>
                     <Nav.Item className={joinClassNames(styles.beerTab, showingTab === 'ingredients' && styles.activeBeerTab)}>
                         <Nav.Link onClick={() => setShowingTab('ingredients')}>Ingredients</Nav.Link>
@@ -24,7 +33,7 @@ export default function BeerCard({beer}) {
                 <Row>
                 {showingTab === 'main' && (
                     <Col xs={12} md={8}>
-                        <Card.Title className="mb-2 mt-2">{beer.name}</Card.Title>
+                        <Card.Title className="mb-2 mt-2">{beer.tagline}</Card.Title>
                         <Card.Text className={styles.beerParagraph}>
                             {beer.description}{' '}
                             {!readMore && (
@@ -68,7 +77,7 @@ export default function BeerCard({beer}) {
                     <Link href={'/beer/' + beer.id}>
                         <Button variant="outline-primary">More about this beer</Button>
                     </Link>
-                    <Button style={{marginLeft: '16px'}}>Add to cart</Button>
+                    <Button style={{marginLeft: '16px'}} onClick={addToCard}>Add to cart</Button>
                     </Col>
                 </Row>
             </Card.Body>

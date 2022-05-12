@@ -9,7 +9,7 @@ export default function MainLayout({ children }) {
         <div>
             <HeaderMenu />
           
-                <Container>
+                <Container style={{paddingTop: '40px'}}>
                     {children} 
                 </Container>
              
