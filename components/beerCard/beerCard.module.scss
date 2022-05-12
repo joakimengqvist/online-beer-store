@@ -6,9 +6,13 @@
 }
 
 .beerCardImage {
-  margin-left: 25%;
-  width: 50%;
+  margin-left: 37%;
+  height: 200px;
+}
 
+.kegBeerCardImage {
+  margin-left: 25%;
+  height: 200px;
 }
 
 .contributedBy {
@@ -28,4 +32,13 @@
 .beerCardHeader {
   background: none;
   padding-bottom: 0px;
+}
+
+.readMore {
+  color: #0d6efd;
+  text-decoration: underline;
+}
+
+.beerParagraph {
+  font-size: 14px;
 }
