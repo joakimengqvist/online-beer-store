@@ -3,7 +3,7 @@ import { Container, Col, Row, Card } from 'react-bootstrap';
 
 export default function Footer() {
     return (
-        <Container>
+       <div style={{clear: 'both'}}>
         <Row>
            
             <Col>
@@ -38,7 +38,8 @@ export default function Footer() {
             </Col>
          
         </Row>
-        </Container>
+        </div>
+     
    
     )
 }
