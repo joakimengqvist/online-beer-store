@@ -1,13 +1,24 @@
 import React from 'react';
-import { Card, Row, Col } from 'react-bootstrap';
+import { Card, Row, Col, Button } from 'react-bootstrap';
+import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
 
 export default function BeerCardSingleProductPage({beer}) {
+
+    const [state, dispatch] = useWebshopStateMachine();
+
+    function addToCard() {
+        dispatch({ type: 'ADD_ITEM_TO_CART', beer });
+    }
 
     return (
         <Row>
             <Col xs={8}>
+                <Card className="p-4">
                 <div style={{marginBottom: '40px'}}>
-                <h1>{beer.name}</h1>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <h1>{beer.name}</h1>
+                    <Button onClick={addToCard}>Add to cart</Button>
+                </div>
                 <h4>{beer.tagline}</h4>
                 <p>{beer.description}</p>
                 <p>{beer.brewers_tips}</p>
@@ -71,9 +82,11 @@ export default function BeerCardSingleProductPage({beer}) {
       </Card>
       </Col>
       </Row>
+      </Card>
       </Col>
+    
       <Col xs={4} style={{display: 'flex', justifyContent: 'center'}}>
-      <img src={beer.image_url} alt={beer.name} style={{maxHeight: '400px'}}/>
+      <img src={beer.image_url} alt={beer.name} style={{maxHeight: '500px', marginTop: '60px'}}/>
       </Col>
       </Row>
     )

@@ -38,12 +38,12 @@ export default function SearchInput() {
       }, [searchValue]);
     
     return (
-   
-
     <InputGroup>
     <FormControl
-      placeholder="Search for a beer.. or two."
+      placeholder="Search for a beer... ;)"
       onChange={event => setSearchValue(event.target.value)}
+      onFocus={event => setSearchValue(event.target.value)} 
+      onBlur={() => setTimeout(() => {setSearchValue('')}, 500)}
     />
     <InputGroup.Text>
     {!loadingSearch && (
@@ -70,10 +70,5 @@ export default function SearchInput() {
     
     )}
   </InputGroup>
-
-
-    
-
     )
-
 }

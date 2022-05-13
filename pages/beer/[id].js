@@ -1,6 +1,5 @@
 import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import { Row, Col, Card } from 'react-bootstrap'
 import BeerCardSingleProductPage from '../../components/beerCard/BeerCardSingleProductPage';
 
 export default function Beer({beer}) {
@@ -23,10 +22,14 @@ export default function Beer({beer}) {
   }
 
   export async function getStaticPaths() {
-    const beers = await fetch('https://api.punkapi.com/v2/beers?per_page=80').then(res => res.json());
+    const mockedArray = []
+    for (let i = 1; i <= 250; i++) {
+      mockedArray.push(i);
+    }
+ 
     return {
-      paths: beers.map(beer => {
-        const id = beer.id.toString();
+      paths: mockedArray.map((beerId) => {
+        const id = beerId.toString();
         return {
           params: {
             id

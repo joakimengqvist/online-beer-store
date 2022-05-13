@@ -18,7 +18,7 @@ export default function HeaderMenu() {
     useEffect(() => {
       setTimeout(() => {
       dispatch({ type: 'FETCH_CART_AMOUNT' });
-      }, 5000);
+      }, 3000);
     });
 
     return (
@@ -38,7 +38,7 @@ export default function HeaderMenu() {
               </div>
             
               <div style={{marginLeft: '20px'}}>
-              <Link href="/beer">
+              <Link href="/beers/1">
              Beers
               </Link>
               </div>
@@ -50,7 +50,7 @@ export default function HeaderMenu() {
                   {state.itemsInCart}
                 </span>
                 
-              <Cart3 onClick={() => setShowingCart(true)} />
+              <Cart3 onClick={() => setShowingCart(true)} style={{cursor: 'pointer'}}/>
 
               <CartModal 
                 show={showingCart}
@@ -74,7 +74,7 @@ function CartModal(props) {
           <Modal.Title>Cart</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Cart />
+          <Cart handleCartModalClose={handleClose} />
           </Modal.Body>
       </Modal>
       </div>
