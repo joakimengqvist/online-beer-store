@@ -4,7 +4,8 @@ import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
 import Link from 'next/link';
 import styles from './cart.module.scss';
 
-export default function Cart({ checkoutPage = false }) {
+export default function Cart(props) {
+    const { checkoutPage = false, handleCartModalClose = () => {} } = props;
     const [state, dispatch] = useWebshopStateMachine();
     const [showPaymenyModal, setShowPaymentModal] = useState(false);
 
@@ -44,7 +45,13 @@ export default function Cart({ checkoutPage = false }) {
     return (
         <Card>
             <div className="p-4">
-            <ItemInCheckout state={state} decrement={decrement} increment={increment} removeItem={removeItem} />
+            <ItemInCheckout 
+                state={state} 
+                decrement={decrement} 
+                increment={increment} 
+                removeItem={removeItem}
+                handleCartModalClose={handleCartModalClose}
+                />
             </div>
             <Row className="p-4">
                 <Col style={{display: 'flex', justifyContent: 'flex-end'}}>
@@ -98,11 +105,15 @@ function PaymentModal(props) {
   }
 
 function ItemInCheckout(props) {
-    const { state, increment, decrement, removeItem } = props;
+    const { state, increment, decrement, removeItem, handleCartModalClose = () => {} } = props;
      
     const item = Object.keys(state.cart).map(itemId => (
             <Card.Text key={state.cart[itemId].id} className={styles.itemRow}>
-                <span style={{fontSize: '18px', fontWeight: 'bold'}}>{state.cart[itemId].name}</span>
+               <div onClick={handleCartModalClose}>
+                <Link href={`/beer/${state.cart[itemId].id}`}>
+                    <a style={{fontSize: '18px', fontWeight: 'bold'}}>{state.cart[itemId].name}</a>
+                </Link>
+                </div>
                 <span>
                 <Button 
                     onClick={() => decrement(itemId, state.cart[itemId].quantityInCart)}
