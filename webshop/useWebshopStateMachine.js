@@ -77,7 +77,7 @@ function reducer(state, event) {
                 }   
             }
 
-            if (event.type === 'ClEAR_CART') {
+            if (event.type === 'CLEAR_CART') {
                 window.localStorage.setItem('cart', JSON.stringify({}));
 
                 return {
@@ -98,9 +98,7 @@ function reducer(state, event) {
         }
 
         case 'pendingPurchase': {
-            console.log('status pendingPurchase')
             if (event.type === 'INITIALIZE_PAYMENT') {
-                console.log('status pendingPurchase INITIALIZE_PAYMENT')
                 return {
                     ...state,
                     status: 'pendingPayment',
@@ -110,9 +108,7 @@ function reducer(state, event) {
             return state;
         }
         case 'pendingPayment': {
-            console.log('status pendingPayment')
             if (event.type === 'COMPLETE_PAYMENT') {
-                console.log('status pendingPayment COMPLETE_PAYMENT')
                 return {
                     ...state,
                     status: 'purchaseCompleted',
@@ -123,12 +119,11 @@ function reducer(state, event) {
         }
 
         case 'purchaseCompleted': {
-            console.log('purchaseCompleted')
             if (event.type === 'QUIT_CHECKOUT') {
-                console.log('purchaseCompleted QUIT_CHECKOUT')
                 return {
                     ...state,
                     status: 'index',
+                    effects: [...state.effects, createEffect('quitCheckout')],
                 }
             }
             return state;
@@ -181,6 +176,10 @@ export function useWebshopStateMachine(campaign) {
                 setTimeout(() => {
                     dispatch({ type: 'QUIT_CHECKOUT' });
                 }, 2000);
+            }
+
+            if (effect.type === 'quitCheckout') {
+                dispatch({ type: 'CLEAR_CART' });
             }
         }
     }, [state, campaign, effects]);

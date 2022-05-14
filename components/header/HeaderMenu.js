@@ -33,24 +33,27 @@ export default function HeaderMenu() {
             <Nav className="me-auto">
             <div style={{marginLeft: '10px'}}>
               <Link href="/" >
+              <span className={styles.headerMenuItem} id="home-header-link">
               Home
+              </span>
               </Link>
               </div>
             
               <div style={{marginLeft: '20px'}}>
               <Link href="/beers/1">
-             Beers
+                <span className={styles.headerMenuItem} id="beer-header-link"> Beers</span>
+            
               </Link>
               </div>
             </Nav>
             <Nav className="justify-content-end" style={{width: '360px'}}>
               <SearchInput />
               <div className={styles.cartContainer}>
-              <span className={styles.cartNumber}>
+              <span id="headerCartNumber" className={styles.cartNumber}>
                   {state.itemsInCart}
                 </span>
                 
-              <Cart3 onClick={() => setShowingCart(true)} style={{cursor: 'pointer'}}/>
+              <Cart3 id="openCart" onClick={() => setShowingCart(true)} style={{cursor: 'pointer'}}/>
 
               <CartModal 
                 show={showingCart}

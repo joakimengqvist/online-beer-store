@@ -1,8 +1,11 @@
 import React from 'react';
 import { Card, Row, Col, Button } from 'react-bootstrap';
 import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
+import styles from './beerCard.module.scss'
 
 export default function BeerCardSingleProductPage({beer}) {
+
+  const isBanned = beer.name === 'Hello My Name is Vladimir';
 
     const [state, dispatch] = useWebshopStateMachine();
 
@@ -11,13 +14,17 @@ export default function BeerCardSingleProductPage({beer}) {
     }
 
     return (
-        <Row>
+        <Row className={isBanned && styles.cancelledBeer}>
             <Col xs={8}>
                 <Card className="p-4">
                 <div style={{marginBottom: '40px'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                  {isBanned ? (
+                    <h1 style={{color: 'red'}}>BANNED - {beer.name}</h1>) : (
                     <h1>{beer.name}</h1>
-                    <Button onClick={addToCard}>Add to cart</Button>
+                    )}
+
+                    <Button id="addToCartSinglePage" disabled={isBanned} onClick={addToCard}>Add to cart</Button>
                 </div>
                 <h4>{beer.tagline}</h4>
                 <p>{beer.description}</p>
@@ -86,7 +93,9 @@ export default function BeerCardSingleProductPage({beer}) {
       </Col>
     
       <Col xs={4} style={{display: 'flex', justifyContent: 'center'}}>
+        {!isBanned && (
       <img src={beer.image_url} alt={beer.name} style={{maxHeight: '500px', marginTop: '60px'}}/>
+      )}
       </Col>
       </Row>
     )
