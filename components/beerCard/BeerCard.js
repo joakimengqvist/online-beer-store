@@ -9,6 +9,10 @@ export default function BeerCard({beer}) {
     const [showingTab, setShowingTab] = useState('main');
     const [readMore, setReadMore] = useState(false);
 
+    const isBanned = beer.name === 'Hello My Name is Vladimir';
+
+    console.log('beer', beer);
+
     const [state, dispatch] = useWebshopStateMachine();
 
     function addToCard() {
@@ -16,14 +20,20 @@ export default function BeerCard({beer}) {
     }
 
     return (
-        <Card className={styles.beerCard}>   
+        <Card className={joinClassNames(styles.beerCard, isBanned && styles.cancelledBeer)}>   
             <Card.Header className={styles.beerCardHeader}>
                 <Nav>
                     <Nav.Item className={joinClassNames(styles.beerTab, showingTab === 'main' && styles.activeBeerTab)} >
-                        <Nav.Link onClick={() => setShowingTab('main')}>{beer.name}</Nav.Link>
+                        <Nav.Link onClick={() => {!isBanned && setShowingTab('main')}}>
+                            {isBanned ? (
+                                <span style={{color: 'red'}}>BANNED - {beer.name}</span>
+                            ) : (
+                                <span>{beer.name}</span>
+                            )}
+                           </Nav.Link>
                     </Nav.Item>
                     <Nav.Item className={joinClassNames(styles.beerTab, showingTab === 'ingredients' && styles.activeBeerTab)}>
-                        <Nav.Link onClick={() => setShowingTab('ingredients')}>Ingredients</Nav.Link>
+                        <Nav.Link onClick={() => {!isBanned && setShowingTab('ingredients')}}>Ingredients</Nav.Link>
                     </Nav.Item>
                 </Nav>
             </Card.Header>
@@ -35,13 +45,19 @@ export default function BeerCard({beer}) {
                         <Card.Text className={styles.beerParagraph}>
                             {beer.description}{' '}
                             {!readMore && (
-                            <a className={styles.readMore} onClick={() => {setReadMore(true)}}>read more</a>
+                            <a 
+                                className={styles.readMore} 
+                                
+                                onClick={() => {!isBanned && setReadMore(true)}}
+                                data-testid="readMore"
+                                >
+                                    read more</a>
                             )}
                         </Card.Text>
                         {readMore && (
                              <Card.Text className={styles.beerParagraph}>
                                  {beer.brewers_tips}{' '}
-                                 <a className={styles.readMore} onClick={() => {setReadMore(false)}}>read less</a>
+                                 <a className={styles.readMore} onClick={() => {!isBanned && setReadMore(false)}}>read less</a>
                             </Card.Text>
                             )}
                     </Col>
@@ -66,18 +82,24 @@ export default function BeerCard({beer}) {
                     </Col>
                     )}
                     <Col xs={12} md={4} className="pt-4">
+                        {!isBanned && (
                         <img 
                             src={beer.image_url}
                             alt={beer.name} 
                             className={beer.image_url === 'https://images.punkapi.com/v2/keg.png' ? styles.kegBeerCardImage : styles.beerCardImage} />
+                            )}
                     </Col>
                 </Row>
                 <Row className="mt-4">
                     <Col style={{display: 'flex'}}>
                     <Link href={'/beer/' + beer.id}>
-                        <Button variant="outline-primary">More about this beer</Button>
+                        <Button 
+                            disabled={isBanned}
+                            id={'moreAboutThisBeer' + beer.id}
+                            variant="outline-primary"
+                            >More about this beer</Button>
                     </Link>
-                    <Button style={{marginLeft: '16px'}} onClick={addToCard}>Add to cart</Button>
+                    <Button id={'addToCartBeerCart' + beer.id} style={{marginLeft: '16px'}} disabled={isBanned} onClick={addToCard}>Add to cart</Button>
                     </Col>
                 </Row>
             </Card.Body>

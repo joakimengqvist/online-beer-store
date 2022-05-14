@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import { Card, Button, Row, Col, Modal } from 'react-bootstrap';
 import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
 import Link from 'next/link';
@@ -44,6 +44,8 @@ export default function Cart(props) {
 
     return (
         <Card>
+            {state.itemsInCart > 0 && (
+            <Fragment>
             <div className="p-4">
             <ItemInCheckout 
                 state={state} 
@@ -51,15 +53,16 @@ export default function Cart(props) {
                 increment={increment} 
                 removeItem={removeItem}
                 handleCartModalClose={handleCartModalClose}
+                checkoutPage={checkoutPage}
                 />
             </div>
             <Row className="p-4">
                 <Col style={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Button style={{marginRight: '12px'}} variant="outline-danger"onClick={clearCart}>Clear cart</Button>
                     {checkoutPage ? 
-                    <Button onClick={checkout}>Checkout</Button> : (
+                    <Button id="checkoutBigCart" onClick={checkout}>Checkout</Button> : (
                     <Link href="/checkout">
-                    <Button>Checkout</Button>
+                    <Button id="checkoutSmallCart">Checkout</Button>
                     </Link>
                     )}
                 </Col>
@@ -70,6 +73,12 @@ export default function Cart(props) {
                 setShowPaymentModal(false)} 
                 state={state} 
                 dispatch={dispatch} />
+            </Fragment>
+            )}
+
+        {state.itemsInCart === 0 && (
+            <h4 className="p-4">Cart is empty</h4>
+        )}
         </Card>
     )
 }
@@ -105,7 +114,7 @@ function PaymentModal(props) {
   }
 
 function ItemInCheckout(props) {
-    const { state, increment, decrement, removeItem, handleCartModalClose = () => {} } = props;
+    const { state, increment, decrement, removeItem, handleCartModalClose = () => {}, checkoutPage } = props;
      
     const item = Object.keys(state.cart).map(itemId => (
             <Card.Text key={state.cart[itemId].id} className={styles.itemRow}>
@@ -120,17 +129,20 @@ function ItemInCheckout(props) {
                     variant="outline-secondary"
                     className={styles.incrementDecrementButton} 
                 >
-                    <span className={styles.decrementOperand}>
+                    <span id={('derementBeer' + state.cart[itemId].id) + (checkoutPage ? 'BigCart' : 'SmallCart')} className={styles.decrementOperand}>
                         -
                     </span>
                 </Button>
-                {state.cart[itemId].quantityInCart}
+                <span id={('quantityInCart' + state.cart[itemId].id) + (checkoutPage ? 'BigCart' : 'SmallCart')}>
+                    {state.cart[itemId].quantityInCart}
+                </span>
+
                 <Button 
                     onClick={() => increment(itemId)}
                     variant="outline-secondary"
                     className={styles.incrementDecrementButton} 
                     >
-                    <span className={styles.incrementOperand}>
+                    <span id={('incrementBeer' + state.cart[itemId].id) + (checkoutPage ? 'BigCart' : 'SmallCart')} className={styles.incrementOperand}>
                         +
                     </span>
                 </Button>

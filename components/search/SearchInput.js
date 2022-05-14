@@ -12,7 +12,6 @@ export default function SearchInput() {
 
     async function search(value) {
         setLoadingSearch(true);
-        console.log('value', value);
         let result = await fetch(`https://api.punkapi.com/v2/beers?beer_name=${value}`)
 
         if (result.status === 200) {
@@ -40,6 +39,7 @@ export default function SearchInput() {
     return (
     <InputGroup>
     <FormControl
+      id="searchBeer"
       placeholder="Search for a beer... ;)"
       onChange={event => setSearchValue(event.target.value)}
       onFocus={event => setSearchValue(event.target.value)} 

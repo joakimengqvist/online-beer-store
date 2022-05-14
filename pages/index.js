@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import MainLayout from '../layouts/MainLayout';
 import Link from 'next/link';
 import { Row, Col, Container, Button, Card } from 'react-bootstrap';
