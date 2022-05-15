@@ -1,24 +1,30 @@
-import { render, screen, fireEvent, getByText as globalGetByText } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import BeerCard from '../BeerCard';
-import { mockedBeer } from '../../../__mocks__/beerMock';
- 
- it('should render correct info from API data', async () => {
-     const { getByTestId } = render(<BeerCard beer={mockedBeer}/>);
- 
-     expect(screen.getByText(/Bourbon Baby/gi)).toBeVisible();
+import {
+  render,
+  screen,
+  fireEvent,
+  getByText as globalGetByText,
+} from "@testing-library/react";
+import "@testing-library/jest-dom";
+import BeerCard from "../BeerCard";
+import { mockedBeer } from "../../../__mocks__/beerMock";
 
-     const readMore = getByTestId('readMore');
+it("should render correct info from API data", async () => {
+  const { getByTestId } = render(<BeerCard beer={mockedBeer} />);
 
-     fireEvent.click(globalGetByText(readMore, /read more/i));
+  expect(screen.getByText(/Bourbon Baby/gi)).toBeVisible();
 
-     expect(screen.getByText(/Ingredients/gi)).toBeVisible();
+  const readMore = getByTestId("readMore");
 
-     expect(screen.getByText(/Santa Paws Scotch ale aged in bourbon barrels/gi)).toBeVisible();
-     
- });
+  fireEvent.click(globalGetByText(readMore, /read more/i));
 
- /*
+  expect(screen.getByText(/Ingredients/gi)).toBeVisible();
+
+  expect(
+    screen.getByText(/Santa Paws Scotch ale aged in bourbon barrels/gi)
+  ).toBeVisible();
+});
+
+/*
 
      await screen.findAllByText(/500 000/i);
     await screen.findAllByText(/0/i);
@@ -35,7 +41,7 @@ import { mockedBeer } from '../../../__mocks__/beerMock';
 
  */
 
- /*
+/*
     "id": 34,
     "name": "Bourbon Baby",
     "tagline": "Barrel-Aged Scotch Ale.",
