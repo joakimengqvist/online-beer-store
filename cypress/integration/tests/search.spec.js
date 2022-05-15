@@ -14,6 +14,7 @@ describe("Navigation", () => {
 
     // clear search input
     cy.get("#searchBeer").clear();
+    cy.wait(3000);
 
     // Search for a different beer
     cy.get("#searchBeer").type("vladimir");
@@ -50,6 +51,5 @@ describe("Navigation", () => {
     cy.contains("Goldings - IPA Is Dead").click();
     // Check if the beer name is displayed
     cy.contains("Single Hop India Pale Ale.");
-
   });
 });

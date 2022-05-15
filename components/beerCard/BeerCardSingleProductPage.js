@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
+import { EVENTS } from "../../webshop/constants";
 import { useWebshopStateMachine } from "../../webshop/useWebshopStateMachine";
 import styles from "./beerCard.module.scss";
 
@@ -10,6 +11,10 @@ export default function BeerCardSingleProductPage({ beer }) {
 
   function addToCard() {
     dispatch({ type: "ADD_ITEM_TO_CART", beer });
+  }
+
+  function addToCard() {
+    dispatch({ type: EVENTS.ADD_ITEM_TO_CART, beer });
   }
 
   return (

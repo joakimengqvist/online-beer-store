@@ -6,20 +6,33 @@ import styles from "./headerMenu.module.scss";
 import "react-toastify/dist/ReactToastify.css";
 import SearchInput from "../search/SearchInput";
 import { useWebshopStateMachine } from "../../webshop/useWebshopStateMachine";
+import { runningOnClient } from "../../helpers/runningOnClient";
 import { ToastContainer } from "react-toastify";
+import { EVENTS } from "../../webshop/constants";
 import Cart from "../cart/Cart";
 
 export default function HeaderMenu() {
   const [state, dispatch] = useWebshopStateMachine();
   const [showingCart, setShowingCart] = useState(false);
 
+  let isCheckoutPage = false;
+  if (runningOnClient()) {
+    isCheckoutPage = window.location.pathname === "/checkout";
+  }
+
   useEffect(() => {
-    dispatch({ type: "FETCH_CART_AMOUNT" });
+    dispatch({ type: EVENTS.FETCH_CART_AMOUNT });
   }, []);
 
   useEffect(() => {
     setTimeout(() => {
-      dispatch({ type: "FETCH_CART_AMOUNT" });
+      dispatch({ type: EVENTS.FETCH_CART_AMOUNT });
+    }, 3000);
+  });
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch({ type: EVENTS.FETCH_CART_AMOUNT });
     }, 3000);
   });
 
@@ -54,21 +67,30 @@ export default function HeaderMenu() {
           <Nav className="justify-content-end" style={{ width: "360px" }}>
             <SearchInput />
             <div className={styles.cartContainer}>
-              <span id="headerCartNumber" className={styles.cartNumber}>
-                {state.itemsInCart}
-              </span>
-
-              <Cart3
-                id="openCart"
-                onClick={() => setShowingCart(true)}
-                style={{ cursor: "pointer" }}
-              />
-
-              <CartModal
-                show={showingCart}
-                handleClose={() => setShowingCart(false)}
-              />
+              {!isCheckoutPage ? (
+                <>
+                  <span id="headerCartNumber" className={styles.cartNumber}>
+                    {state.itemsInCart}
+                  </span>
+                  <Cart3
+                    id="openCart"
+                    onClick={() => setShowingCart(true)}
+                    style={{ cursor: "pointer" }}
+                  />
+                </>
+              ) : (
+                <>
+                  <span>cart: </span>
+                  <span id="headerCartNumber" className={styles.cartNumber}>
+                    {state.itemsInCart}
+                  </span>
+                </>
+              )}
             </div>
+            <CartModal
+              show={showingCart}
+              handleClose={() => setShowingCart(false)}
+            />
           </Nav>
         </Navbar.Collapse>
       </Container>
