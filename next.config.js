@@ -1,3 +1,3 @@
 module.exports = {
-    excludeFile: (str) => /\*.{spec,test}.js/.test(str)
-  }
+  excludeFile: (str) => /\*.{spec,test}.js/.test(str),
+};
