@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format-check": "prettier --check '**/*.js'",
-    "format": "prettier --write '**/*.js'",
+    "format": "yarn run prettier --write '**/*.{js,css,md,scss}'",
+    "check-format": "yarn run prettier --check '**/*.{js,css,md,scss}'",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
     "e2e": "start-server-and-test start http://localhost:3000 cypress",
@@ -33,6 +33,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
+    "prettier": "2.6.2",
     "sass": "^1.51.0"
   }
 }
