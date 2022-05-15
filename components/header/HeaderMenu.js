@@ -3,8 +3,10 @@ import { Navbar, Container, Nav, Modal } from "react-bootstrap";
 import { Cart3 } from "react-bootstrap-icons";
 import Link from "next/link";
 import styles from "./headerMenu.module.scss";
+import "react-toastify/dist/ReactToastify.css";
 import SearchInput from "../search/SearchInput";
 import { useWebshopStateMachine } from "../../webshop/useWebshopStateMachine";
+import { ToastContainer } from "react-toastify";
 import Cart from "../cart/Cart";
 
 export default function HeaderMenu() {
@@ -70,6 +72,8 @@ export default function HeaderMenu() {
           </Nav>
         </Navbar.Collapse>
       </Container>
+
+      <ToastContainer newestOnTop={false} rtl={false} />
     </Navbar>
   );
 }

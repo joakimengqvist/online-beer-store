@@ -8,9 +8,7 @@ export default function MainLayout({ children }) {
   return (
     <div>
       <HeaderMenu />
-
       <Container style={{ paddingTop: "40px" }}>{children}</Container>
-
       <Footer />
     </div>
   );

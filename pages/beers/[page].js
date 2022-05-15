@@ -70,20 +70,3 @@ export async function getStaticPaths() {
     fallback: false,
   };
 }
-
-/*
-    const beers = await fetch('https://api.punkapi.com/v2/beers?per_page=80').then(res => res.json());
-    return {
-      paths: beers.map(beer => {
-        const id = beer.id.toString();
-        return {
-          params: {
-            id
-          }
-        }
-      }),
-      fallback: false
-    }
-  }
-
-   */

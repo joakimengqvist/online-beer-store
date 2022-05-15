@@ -8,12 +8,8 @@ import { useWebshopStateMachine } from "../../webshop/useWebshopStateMachine";
 export default function BeerCard({ beer }) {
   const [showingTab, setShowingTab] = useState("main");
   const [readMore, setReadMore] = useState(false);
-
-  const isBanned = beer.name === "Hello My Name is Vladimir";
-
-  console.log("beer", beer);
-
   const [state, dispatch] = useWebshopStateMachine();
+  const isBanned = beer.name === "Hello My Name is Vladimir";
 
   function addToCard() {
     dispatch({ type: "ADD_ITEM_TO_CART", beer });

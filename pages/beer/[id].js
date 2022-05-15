@@ -3,7 +3,6 @@ import MainLayout from "../../layouts/MainLayout";
 import BeerCardSingleProductPage from "../../components/beerCard/BeerCardSingleProductPage";
 
 export default function Beer({ beer }) {
-  console.log("beer", beer);
   return (
     <MainLayout>
       <BeerCardSingleProductPage beer={beer} />
