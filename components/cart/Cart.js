@@ -1,6 +1,7 @@
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, Button, Row, Col, Modal } from 'react-bootstrap';
 import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
+import { EVENTS, STATUSES} from '../../webshop/constants';
 import Link from 'next/link';
 import styles from './cart.module.scss';
 
@@ -10,32 +11,40 @@ export default function Cart(props) {
     const [showPaymenyModal, setShowPaymentModal] = useState(false);
 
     function increment(itemId) {
-        dispatch({ type: 'INCREMENT_ITEM_QUANTITY', itemId });
+        dispatch({ type: EVENTS.INCREMENT_ITEM_QUANTITY, itemId });
     }
 
     function decrement(itemId, quantity) {
         if (quantity === 1) {
-            dispatch({ type: 'REMOVE_ITEM_FROM_CART', itemId });
+            dispatch({ type: EVENTS.REMOVE_ITEM_FROM_CART, itemId });
             return null;
         }
-        dispatch({ type: 'DECREMENT_ITEM_QUANTITY', itemId });
+        dispatch({ type: EVENTS.DECREMENT_ITEM_QUANTITY, itemId });
     }
 
     function removeItem(itemId) {
-        dispatch({ type: 'REMOVE_ITEM_FROM_CART', itemId });
+        dispatch({ type: EVENTS.REMOVE_ITEM_FROM_CART, itemId });
+    }
+
+    function changeItem(itemId, quantity) {
+        dispatch({ type: EVENTS.CHANGE_ITEM_QUANTITY, itemId, quantity });
+    }
+
+    function changeItemNoUpdate(itemId, quantity) {
+        dispatch({ type: EVENTS.CHANGE_ITEM_QUANTITY_NO_UPDATE, itemId, quantity });
     }
 
     function clearCart() {
-        dispatch({ type: 'CLEAR_CART' });
+        dispatch({ type: EVENTS.CLEAR_CART });
     }
 
     function checkout() {
         setShowPaymentModal(true);
-        dispatch({ type: 'CHECKOUT' });
+        dispatch({ type: EVENTS.CHECKOUT });
     }
 
     useEffect(() => {
-            dispatch({ type: 'FETCH_ORDER' });
+            dispatch({ type: EVENTS.FETCH_ORDER });
     }, []);
     
     if (state.cart === {}) {
@@ -44,37 +53,41 @@ export default function Cart(props) {
 
     return (
         <Card>
-            {state.itemsInCart > 0 && (
-            <Fragment>
-            <div className="p-4">
-            <ItemInCheckout 
-                state={state} 
-                decrement={decrement} 
-                increment={increment} 
-                removeItem={removeItem}
-                handleCartModalClose={handleCartModalClose}
-                checkoutPage={checkoutPage}
+            {state.itemsInCart > 0 && (<>
+                <div className="p-4">
+                {Object.keys(state.cart).map(itemId => (
+                <ItemInCheckout 
+                    state={state} 
+                    itemId={itemId}
+                    decrement={decrement} 
+                    increment={increment} 
+                    removeItem={removeItem}
+                    changeItem={changeItem}
+                    changeItemNoUpdate={changeItemNoUpdate}
+                    handleCartModalClose={handleCartModalClose}
+                    checkoutPage={checkoutPage}
+                    />
+                ))}
+                </div>
+                <Row className="p-4">
+                    <Col style={{display: 'flex', justifyContent: 'flex-end'}}>
+                        <Button style={{marginRight: '12px'}} variant="outline-danger"onClick={clearCart}>Clear cart</Button>
+                        {checkoutPage ? 
+                        <Button id="checkoutBigCart" onClick={checkout}>Checkout</Button> : (
+                        <Link href="/checkout">
+                        <Button id="checkoutSmallCart">Checkout</Button>
+                        </Link>
+                        )}
+                    </Col>
+                </Row>
+                <PaymentModal 
+                    show={showPaymenyModal} 
+                    handleClose={() => 
+                    setShowPaymentModal(false)} 
+                    state={state} 
+                    dispatch={dispatch} 
                 />
-            </div>
-            <Row className="p-4">
-                <Col style={{display: 'flex', justifyContent: 'flex-end'}}>
-                    <Button style={{marginRight: '12px'}} variant="outline-danger"onClick={clearCart}>Clear cart</Button>
-                    {checkoutPage ? 
-                    <Button id="checkoutBigCart" onClick={checkout}>Checkout</Button> : (
-                    <Link href="/checkout">
-                    <Button id="checkoutSmallCart">Checkout</Button>
-                    </Link>
-                    )}
-                </Col>
-            </Row>
-            <PaymentModal 
-                show={showPaymenyModal} 
-                handleClose={() => 
-                setShowPaymentModal(false)} 
-                state={state} 
-                dispatch={dispatch} />
-            </Fragment>
-            )}
+            </>)}
 
         {state.itemsInCart === 0 && (
             <h4 className="p-4">Cart is empty</h4>
@@ -87,7 +100,7 @@ function PaymentModal(props) {
     const { show, handleClose, state} = props; 
 
     useEffect(() => {
-        if (state.status === 'index') {
+        if (state.status === STATUSES.index) {
             handleClose();
         }
     }, [state.status]);
@@ -98,25 +111,24 @@ function PaymentModal(props) {
             <Modal.Title>Payment</Modal.Title>
           </Modal.Header>
           <Modal.Body style={{maxWidth: '1000px'}}>
-           {state.status === 'pendingPurchase' && (
+           {state.status === STATUSES.pendingPurchase && (
                <h5>Pending purchase</h5>
            )}
-            {state.status === 'pendingPayment' && (
+            {state.status === STATUSES.pendingPayment && (
                <h5>Pending Payment</h5>
            )}
-            {state.status === 'purchaseCompleted' && (
+            {state.status === STATUSES.purchaseCompleted && (
                <h5>Purchase completed</h5>
            )}
             </Modal.Body>
         </Modal>
-   
     );
   }
 
 function ItemInCheckout(props) {
-    const { state, increment, decrement, removeItem, handleCartModalClose = () => {}, checkoutPage } = props;
+    const { state, itemId, increment, decrement, removeItem, changeItem, changeItemNoUpdate, handleCartModalClose = () => {}, checkoutPage } = props;
      
-    const item = Object.keys(state.cart).map(itemId => (
+    return (
             <Card.Text key={state.cart[itemId].id} className={styles.itemRow}>
                <div onClick={handleCartModalClose}>
                 <Link href={`/beer/${state.cart[itemId].id}`}>
@@ -133,10 +145,18 @@ function ItemInCheckout(props) {
                         -
                     </span>
                 </Button>
-                <span id={('quantityInCart' + state.cart[itemId].id) + (checkoutPage ? 'BigCart' : 'SmallCart')}>
-                    {state.cart[itemId].quantityInCart}
-                </span>
-
+                <input 
+                    id={'quantityInCart' + state.cart[itemId].id + (checkoutPage ? 'BigCart' : 'SmallCart')} 
+                    onBlur={event => {
+                        console.log(' event.target.value',  event.target.value);
+                        changeItem(itemId, event.target.value)
+                    }}
+                    onChange={event => changeItemNoUpdate(itemId, event.target.value)}
+                    value={state.cart[itemId].quantityInCart}
+                    className={styles.quantityInCart}
+                    type="text"
+                    numeric
+                />
                 <Button 
                     onClick={() => increment(itemId)}
                     variant="outline-secondary"
@@ -149,9 +169,7 @@ function ItemInCheckout(props) {
                 <Button onClick={() => removeItem(itemId)} variant="outline-danger" style={{marginLeft: '20px'}}>Remove</Button>
                 </span>
             </Card.Text>  
-            )
+            
         );
-
-        return item
     }
 

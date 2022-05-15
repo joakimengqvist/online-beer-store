@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Row, Col, Button } from 'react-bootstrap';
+import { EVENTS } from '../../webshop/constants';
 import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
 import styles from './beerCard.module.scss'
 
@@ -10,14 +11,14 @@ export default function BeerCardSingleProductPage({beer}) {
     const [state, dispatch] = useWebshopStateMachine();
 
     function addToCard() {
-        dispatch({ type: 'ADD_ITEM_TO_CART', beer });
+        dispatch({ type:  EVENTS.ADD_ITEM_TO_CART, beer });
     }
 
     return (
         <Row className={isBanned && styles.cancelledBeer}>
             <Col xs={8}>
                 <Card className="p-4">
-                <div style={{marginBottom: '40px'}}>
+                <div style={{marginBottom: '10px'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                   {isBanned ? (
                     <h1 style={{color: 'red'}}>BANNED - {beer.name}</h1>) : (
@@ -29,6 +30,7 @@ export default function BeerCardSingleProductPage({beer}) {
                 <h4>{beer.tagline}</h4>
                 <p>{beer.description}</p>
                 <p>{beer.brewers_tips}</p>
+                <p>Alcohol: {beer.abv}%</p>
             </div>
       
       <Row>

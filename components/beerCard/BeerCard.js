@@ -3,6 +3,7 @@ import { Card, Row, Col, Nav, Button } from 'react-bootstrap';
 import Link from 'next/link';
 import styles from './beerCard.module.scss';
 import { joinClassNames } from '../../helpers/classNameHelpers';
+import { EVENTS } from '../../webshop/constants';
 import { useWebshopStateMachine } from '../../webshop/useWebshopStateMachine';
 
 export default function BeerCard({beer}) {
@@ -11,7 +12,7 @@ export default function BeerCard({beer}) {
     const [state, dispatch] = useWebshopStateMachine();
 
     function addToCard() {
-        dispatch({ type: 'ADD_ITEM_TO_CART', beer });
+        dispatch({ type:  EVENTS.ADD_ITEM_TO_CART, beer });
     }
 
     const isBanned = beer.name === 'Hello My Name is Vladimir';

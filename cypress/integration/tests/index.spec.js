@@ -44,9 +44,6 @@ describe('Navigation', () => {
     // Go to checkout page
     cy.visit('http://localhost:3000/checkout')
 
-    // Check that quantity in cart is updated
-    cy.get('#headerCartNumber').should('have.text', '7')
-
     // Check that checkout page is displayed with selected beers
     cy.contains('The Physics')
     cy.contains('American Wheat')
@@ -71,19 +68,32 @@ describe('Navigation', () => {
     cy.get('#incrementBeer47SmallCart').click()
 
     // Check that quantity of single beer in cart is updated
-    cy.get('#quantityInCart47SmallCart').should('have.text', '5')
+    cy.get('#quantityInCart47SmallCart').should('have.value', '5')
 
     // Decrement single beer quantity in cart
     cy.get('#derementBeer47SmallCart').click();
 
     // Check that quantity of single beer in cart is updated
-    cy.get('#quantityInCart47SmallCart').should('have.text', '4')
+    cy.get('#quantityInCart47SmallCart').should('have.value', '4')
+
+    // Change value of item in cart by typing
+    cy.get('#quantityInCart47SmallCart').type('2')
+
+    // Check that quantity of single beer in cart is updated
+    cy.get('#quantityInCart47SmallCart').should('have.value', '42')
+
+    cy.get('#quantityInCart47SmallCart').type('{selectall}{backspace}')
+    cy.get('#quantityInCart46SmallCart').click()
+
+    // Check that the header cart is updated with -1
+    cy.get('#headerCartNumber').should('have.text', '6')
 
     // Decrement a single beer quantity in cart from 1 to 0
-    cy.get('#derementBeer46SmallCart').click()
+    cy.get('#derementBeer43SmallCart').click()
 
-    // Check that the beer is removed is decremented from 1 to 0
-    cy.get('#headerCartNumber').should('have.text', '6')
+    // Check that the header cart is updated with -1
+    cy.get('#headerCartNumber').should('have.text', '5')
+    cy.wait(3000)
 
     // Go to checkout page
     cy.get('#checkoutSmallCart').click()
@@ -98,6 +108,8 @@ describe('Navigation', () => {
     cy.contains('Pending purchase')
     cy.contains('Pending Payment')
     cy.contains('Purchase completed')
+
+    cy.contains('Cleared cart')
 
     cy.wait(3000)
 
