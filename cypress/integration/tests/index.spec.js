@@ -23,6 +23,9 @@ describe("Navigation", () => {
     // Add beer to cart
     cy.get("#addToCartSinglePage").click();
 
+    // Check that toast is triggered with name of beer
+    cy.contains("Added Bad Pixie to cart");
+
     // Check that cart quantity is increased
     cy.get("#headerCartNumber").should("have.text", "1");
 
@@ -34,11 +37,30 @@ describe("Navigation", () => {
 
     // Add several beers to cart
     cy.get("#addToCartBeerCart43").click();
+    // Check that toast is triggered with name of beer
+    cy.contains("Added American Wheat to cart");
+
     cy.get("#addToCartBeerCart44").click();
+    // Check that toast is triggered with name of beer
+    cy.contains("Added Dog Wired (w/8 Wired) to cart");
+
     cy.get("#addToCartBeerCart45").click();
+    // Check that toast is triggered with name of beer
+    cy.contains("Added The Physics to cart");
+
     cy.get("#addToCartBeerCart46").click();
+    cy.get("#addToCartBeerCart46").click();
+    cy.get("#addToCartBeerCart46").click();
+    // Check that toast is triggered with name of beer
+    cy.contains("Added Anarchist Alchemist to cart");
+
     cy.get("#addToCartBeerCart47").click();
+    // Check that toast is triggered with name of beer
+    cy.contains("Added AB:15 to cart");
+
     cy.get("#addToCartBeerCart48").click();
+    // Check that toast is triggered with name of beer
+    cy.contains("Added Goldings - IPA Is Dead to cart");
 
     // Go to checkout page
     cy.visit("http://localhost:3000/checkout");
@@ -71,6 +93,7 @@ describe("Navigation", () => {
 
     // Check that quantity of single beer in cart is updated
     cy.get("#quantityInCart47SmallCart").should("have.text", "5");
+    cy.get("#quantityInCart46SmallCart").should("have.text", "3");
 
     // Decrement single beer quantity in cart
     cy.get("#derementBeer47SmallCart").click();
@@ -79,7 +102,10 @@ describe("Navigation", () => {
     cy.get("#quantityInCart47SmallCart").should("have.text", "4");
 
     // Decrement a single beer quantity in cart from 1 to 0
-    cy.get("#derementBeer46SmallCart").click();
+    cy.get("#derementBeer45SmallCart").click();
+
+    // Check that toast is triggered with name of beer
+    cy.contains("Removed The Physics from cart");
 
     // Check that the beer is removed is decremented from 1 to 0
     cy.get("#headerCartNumber").should("have.text", "6");

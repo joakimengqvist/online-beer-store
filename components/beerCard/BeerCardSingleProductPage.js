@@ -16,7 +16,7 @@ export default function BeerCardSingleProductPage({ beer }) {
     <Row className={isBanned && styles.cancelledBeer}>
       <Col xs={8}>
         <Card className="p-4">
-          <div style={{ marginBottom: "40px" }}>
+          <div style={{ marginBottom: "10px" }}>
             <div
               style={{
                 display: "flex",
@@ -41,6 +41,7 @@ export default function BeerCardSingleProductPage({ beer }) {
             <h4>{beer.tagline}</h4>
             <p>{beer.description}</p>
             <p>{beer.brewers_tips}</p>
+            <p>Alcohol: {beer.abv}%</p>
           </div>
 
           <Row>
@@ -48,12 +49,20 @@ export default function BeerCardSingleProductPage({ beer }) {
               <Card>
                 <Card.Body>
                   <Card.Title>Brewing information</Card.Title>
-                  {Object.keys(beer.ingredients).map((ingredientType) => (
-                    <div key={ingredientType}>
+                  {Object.keys(beer.ingredients).map((ingredientType, i) => (
+                    <div
+                      key={(ingredientType + i).toString().replace(/\s/g, "")}
+                    >
                       <span>{ingredientType}: </span>
                       {Array.isArray(beer.ingredients[ingredientType])
                         ? beer.ingredients[ingredientType].map((ingredient) => (
-                            <span key={ingredient.id}>{ingredient.name} </span>
+                            <span
+                              key={(ingredientType + ingredient.name + i)
+                                .toString()
+                                .replace(/\s/g, "")}
+                            >
+                              {ingredient.name}
+                            </span>
                           ))
                         : beer.ingredients[ingredientType]}
                     </div>
@@ -71,7 +80,7 @@ export default function BeerCardSingleProductPage({ beer }) {
                     </span>
                     <br />
                     {beer.method.mash_temp.map((mash, i) => (
-                      <span>
+                      <span key={"mashMapping" + i}>
                         Mash {++i}: {mash.temp.value} {mash.temp.unit}{" "}
                         {mash.duration} min
                         <br />
@@ -110,8 +119,8 @@ export default function BeerCardSingleProductPage({ beer }) {
                       Food pairing
                     </span>
                     <br />
-                    {beer.food_pairing.map((food) => (
-                      <span key={food}>
+                    {beer.food_pairing.map((food, i) => (
+                      <span key={food + i}>
                         {food}
                         {beer.food_pairing.length - 1 ===
                         beer.food_pairing.indexOf(food)
