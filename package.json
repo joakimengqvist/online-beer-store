@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format-check": "prettier --check '**/*.js'",
+    "format": "prettier --write '**/*.js'",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
     "e2e": "start-server-and-test start http://localhost:3000 cypress",
@@ -19,6 +21,7 @@
     "react-bootstrap": "^2.3.1",
     "react-bootstrap-icons": "^1.8.2",
     "react-dom": "17.0.0",
+    "react-toastify": "^9.0.1",
     "sass": "^1.51.0"
   },
   "devDependencies": {

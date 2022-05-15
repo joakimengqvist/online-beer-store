@@ -1,6 +1,7 @@
 import { useReducer, useEffect, useRef } from 'react';
 import { createEffect } from '../helpers/createEffect';
 import { runningOnClient } from '../helpers/runningOnClient';
+import { toast } from 'react-toastify';
 
 function reducer(state, event) {
     if (!runningOnClient()) {
@@ -27,22 +28,26 @@ function reducer(state, event) {
             }
 
             if (event.type === 'ADD_ITEM_TO_CART') {
-                if (cart[event.beer.id]) {
-                    cart[event.beer.id].quantityInCart++;
+                const beerIdInCart = `beerid${event.beer.id}`;
+                const beerName = event.beer.name;
+                if (cart[beerIdInCart]) {
+                    cart[beerIdInCart].quantityInCart++;
                     window.localStorage.setItem('cart', JSON.stringify(cart));
                     return {
                         ...state,
-                        cart: cart
+                        cart: cart,
+                        effects: [...state.effects, createEffect('triggerToast', {action: 'add', beerName: beerName})],
                     }   
                 }
-                cart['beerid' + event.beer.id] = event.beer;
-                cart['beerid' + event.beer.id].quantityInCart = 1;
+                cart[beerIdInCart] = event.beer;
+                cart[beerIdInCart].quantityInCart = 1;
                 window.localStorage.setItem('cart', JSON.stringify(cart));
 
                 return {
                     ...state,
                     cart: cart,
-                    itemsInCart: state.itemsInCart + 1
+                    itemsInCart: state.itemsInCart + 1,
+                    effects: [...state.effects, createEffect('triggerToast', {action: 'add', beerName: beerName})],
                 }     
             }
 
@@ -67,13 +72,15 @@ function reducer(state, event) {
             }
 
             if (event.type === 'REMOVE_ITEM_FROM_CART') {
+                const beerName = cart[event.itemId].name;
                 delete cart[event.itemId];
                 window.localStorage.setItem('cart', JSON.stringify(cart));
 
                 return {
                     ...state,
                     cart: cart,
-                    itemsInCart: state.itemsInCart - 1
+                    itemsInCart: state.itemsInCart - 1,
+                    effects: [...state.effects, createEffect('triggerToast', {action: 'remove', beerName: beerName})],
                 }   
             }
 
@@ -83,7 +90,8 @@ function reducer(state, event) {
                 return {
                     ...state,
                     cart: {},
-                    itemsInCart: 0
+                    itemsInCart: 0,
+                    effects: [...state.effects, createEffect('triggerToast', {action: 'clear'})],
                 }
             }
 
@@ -94,8 +102,10 @@ function reducer(state, event) {
                     effects: [...state.effects, createEffect('initiateCheckout')],
                 }
             }
+
             return state;
         }
+
 
         case 'pendingPurchase': {
             if (event.type === 'INITIALIZE_PAYMENT') {
@@ -159,6 +169,33 @@ export function useWebshopStateMachine(campaign) {
             }
 
             effect.markAsStarted();
+
+            if (effect.type  === 'triggerToast') {
+                if (effect.action  === 'add') {
+                    toast.success(`Added ${effect.beerName} to cart`, {
+                        position: "bottom-right",
+                        autoClose: 3000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                    }); 
+                }
+                if (effect.action  === 'remove') {
+                    toast.info(`Removed ${effect.beerName} to cart`, {
+                        position: "bottom-right",
+                        autoClose: 3000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                    });
+                }
+                if (effect.action  === 'clear') {
+                    toast.info('Cleared cart', {
+                        position: "bottom-right",
+                        autoClose: 3000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                    });
+                }
+            }
 
             if (effect.type === 'initiateCheckout') {
                 setTimeout(() => {

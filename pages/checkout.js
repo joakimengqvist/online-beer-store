@@ -4,7 +4,6 @@ import MainLayout from '../layouts/MainLayout';
 import { Row, Col } from 'react-bootstrap';
 
 export default function Checkout() {
-   
     return (
         <MainLayout>
             <Row>
