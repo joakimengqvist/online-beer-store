@@ -174,7 +174,6 @@ function ItemInCheckout(props) {
             (checkoutPage ? "BigCart" : "SmallCart")
           }
           onBlur={(event) => {
-            console.log(" event.target.value", event.target.value);
             changeItem(itemId, event.target.value);
           }}
           onChange={(event) => changeItemNoUpdate(itemId, event.target.value)}
