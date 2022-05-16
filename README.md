@@ -6,7 +6,7 @@ Project is a React application using next.js to create server side rendered page
 
 API used to fetch the beer data: https://punkapi.com/documentation/v2
 
-# run the project
+## run the project
 
 Install dependencies
 `yarn install`
@@ -17,7 +17,7 @@ Build a development bundle
 Run the project locally on localhost:3000
 `yarn dev`
 
-# run tests
+## run tests
 
 Run unit tests
 `yarn jest`
@@ -25,7 +25,7 @@ Run unit tests
 Run cypress integration tests through cypress terminal
 `yarn cypress`
 
-# Other info
+## Other info
 
 The project is using a single file for cart state management. It is utilizing local storage for handeling state across the application.
 
