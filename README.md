@@ -29,3 +29,7 @@ Run cypress integration tests through cypress terminal
 
 The project is using a single file for cart state management. It is utilizing local storage for handeling state across the application.
 
+## Latest released build link
+https://online-beer-store.vercel.app/
+
+
